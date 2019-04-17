@@ -23,7 +23,7 @@ const (
 	messageBufferSize = 256
 )
 
-func (r *room) rum() {
+func (r *room) run() {
 	for {
 		select {
 		case client := <-r.join:
