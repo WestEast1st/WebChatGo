@@ -37,18 +37,21 @@
 
           socket.send(msgBox.val());
           msgBox.val("");
+          console.log("メッセージを送信しました。");
           return false;
         });
 
         if (!window["WebSocket"]) {
           alert("エラー: WebSocketに対応していないブラウザです。")
         } else {
-          socket = new WebSocket("ws://localhost:8888/room");
+          socket = new WebSocket("ws://{{.Host}}/room");
           socket.onclose = function () {
             alert("接続が終了しました。");
           }
           socket.onmessage = function (e) {
             message.append($("<li>").text(e.data));
+            console.log("メッセージを受信しました。");
+
           }
         }
       })
