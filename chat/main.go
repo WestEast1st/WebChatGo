@@ -38,7 +38,10 @@ func main() {
 		templateHandler内部のServeHTTPメソッドは、http.Handlerのインタフェスに適合しているので直接渡すことができる
 	*/
 	http.Handle("/", MustAuth(&templateHandler{filename: "chat.html"}))
+	http.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("../assets/"))))
+	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.Handle("/room", r)
+
 	// チャットルームを開始します
 	go r.run()
 	// Webサーバー起動
