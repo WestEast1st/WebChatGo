@@ -10,6 +10,9 @@ import (
 	"text/template"
 
 	"../trace"
+	"github.com/joho/godotenv"
+	"github.com/stretchr/gomniauth"
+	"github.com/stretchr/gomniauth/providers/github"
 )
 
 //http ハンドラーのtemplate
@@ -27,10 +30,23 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.templ.Execute(w, r)
 }
 
+func Env_load() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func main() {
+	Env_load()
 	//option
 	var addr = flag.String("addr", ":8888", "アプリケーションのアドレス")
 	flag.Parse()
+	// Gomniauth
+	gomniauth.SetSecurityKey("セキュリティキー")
+	gomniauth.WithProviders(
+		github.New(os.Getenv("GITHUB_CLIENT_ID"), os.Getenv("GITHUB_SECRET"), "http://localhost:8888/auth/callback/github"),
+	)
 	// WebSocket
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
