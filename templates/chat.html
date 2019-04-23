@@ -35,8 +35,9 @@
             alert("エラー: WebSocket接続が行われていません。");
             return false;
           }
-
-          socket.send({"Message" : msgBox.val()});
+          var msg = JSON.stringify({"Message": msgBox.val()});
+          console.log(msg);
+          socket.send(msg);
           msgBox.val("");
           console.log("メッセージを送信しました。");
           return false;

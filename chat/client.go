@@ -4,6 +4,7 @@ package main
 clientのモデル化
 */
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -26,7 +27,9 @@ type client struct {
 func (c *client) read() {
 	for {
 		var msg *message
-		if err := c.socket.ReadJSON(&msg); err == nil {
+		err := c.socket.ReadJSON(&msg)
+		fmt.Println(err)
+		if err == nil {
 			msg.When = time.Now()
 			msg.Name = c.userData["name"].(string)
 			c.room.forward <- msg
@@ -35,6 +38,7 @@ func (c *client) read() {
 			break
 		}
 	}
+	c.socket.Close()
 }
 
 //method write
