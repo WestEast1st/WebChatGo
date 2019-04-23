@@ -36,7 +36,7 @@
             return false;
           }
 
-          socket.send(msgBox.val());
+          socket.send({"Message" : msgBox.val()});
           msgBox.val("");
           console.log("メッセージを送信しました。");
           return false;
@@ -50,9 +50,14 @@
             alert("接続が終了しました。");
           }
           socket.onmessage = function (e) {
-            message.append($("<li>").text(e.data));
+            var msg = eval("("+e.data+")");
+            message.append(
+              $("<li>").append(
+                $("<string>").text(msg.Name + ": "),
+                $("<span>").text(msg.Message)
+              )
+            );
             console.log("メッセージを受信しました。");
-
           }
         }
       })
