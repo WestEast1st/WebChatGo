@@ -54,6 +54,10 @@
             var msg = eval("("+e.data+")");
             message.append(
               $("<li>").append(
+                $("<img>").css({
+                  width: 50,
+                  verticalAligen:"middle",
+                }).attr("src",msg.AvaterURL),
                 $("<string>").text(msg.Name + ": "),
                 $("<span>").text(msg.Message)
               )
