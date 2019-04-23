@@ -32,8 +32,8 @@ func (c *client) read() {
 		if err == nil {
 			msg.When = time.Now()
 			msg.Name = c.userData["name"].(string)
-			if avaterURL, ok := c.userData["avater_url"]; ok {
-				msg.AvatarURL = avaterURL.(string)
+			if avatarURL, ok := c.userData["avatar_url"]; ok {
+				msg.AvatarURL = avatarURL.(string)
 			}
 			c.room.forward <- msg
 			log.Println("受信しました")

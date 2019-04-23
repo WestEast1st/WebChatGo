@@ -17,6 +17,7 @@
       {{.UserData.name}}:<br/>
       <textarea rows="8" cols="80"></textarea>
       <input type="submit" value="送信" />
+      または<a href="/logout">サインアウト</a>
     </form>
     <script
       src="https://code.jquery.com/jquery-1.12.4.js"
@@ -57,7 +58,7 @@
                 $("<img>").css({
                   width: 50,
                   verticalAligen:"middle",
-                }).attr("src",msg.AvaterURL),
+                }).attr("src",msg.AvatarURL),
                 $("<string>").text(msg.Name + ": "),
                 $("<span>").text(msg.Message)
               )
