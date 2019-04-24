@@ -55,13 +55,14 @@ func main() {
 		github.New(os.Getenv("GITHUB_CLIENT_ID"), os.Getenv("GITHUB_SECRET"), "http://localhost:8888/auth/callback/github"),
 	)
 	// WebSocket
-	r := newRoom(UseGravatar)
+	r := newRoom(UseFileSystemAvatar)
 	r.tracer = trace.New(os.Stdout)
 	/*
 		templateHandler内部のServeHTTPメソッドは、http.Handlerのインタフェスに適合しているので直接渡すことができる
 	*/
 	http.Handle("/", MustAuth(&templateHandler{filename: "chat.html"}))
-	http.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("../assets/"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
+	http.Handle("/avatars/", http.StripPrefix("/avatars/", http.FileServer(http.Dir("./avatars/"))))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.HandleFunc("/auth/", loginHandler)
 	http.Handle("/upload", &templateHandler{filename: "upload.html"})
