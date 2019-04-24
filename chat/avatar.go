@@ -1,11 +1,7 @@
 package main
 
 import (
-	"crypto/md5"
 	"errors"
-	"fmt"
-	"io"
-	"strings"
 )
 
 // ErrNoAvatarはAvatarインスタンスがアバターのURLを返すことができない場合に発生するエラー
@@ -37,11 +33,18 @@ type GravatarAvatar struct{}
 var UseGravatar GravatarAvatar
 
 func (_ GravatarAvatar) GetAvatarURL(c *client) (string, error) {
-	if email, ok := c.userData["email"]; ok {
-		if emailstr, ok := email.(string); ok {
-			m := md5.New()
-			io.WriteString(m, strings.ToLower(emailstr))
-			return fmt.Sprintf("//www.gravatar.com/avatar/%x", m.Sum(nil)), nil
+	/*
+		if email, ok := c.userData["email"]; ok {
+			if emailstr, ok := email.(string); ok {
+				m := md5.New()
+				io.WriteString(m, strings.ToLower(emailstr))
+				return fmt.Sprintf("//www.gravatar.com/avatar/%x", m.Sum(nil)), nil
+			}
+		}
+	*/
+	if userid, ok := c.userData["userid"]; ok {
+		if useridstr, ok := userid.(string); ok {
+			return "//www.gravatar.com/avatar/" + useridstr, nil
 		}
 	}
 	return "", ErrNoAvatarURL
