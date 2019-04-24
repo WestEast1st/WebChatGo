@@ -8,26 +8,36 @@
      ul {
        list-style: none;
      }
+     ul#messages {list-style: none;}
+     ul#messages li {margin-bottom: 20px;}
+     ul#messages li img {margin-right: 10px;}
+     div#msgArea {margin-top: 20px;}
     </style>
+    <link rel="stylesheet"
+       href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   </head>
   <body>
-    <ul id="message"></ul>
-    WebSocketを使ったチャットアプリケーション
-    <form id="chatbox">
-      {{.UserData.name}}:<br/>
-      <textarea rows="8" cols="80"></textarea>
-      <input type="submit" value="送信" />
-      または<a href="/logout">サインアウト</a>
-    </form>
-    <script
-      src="https://code.jquery.com/jquery-1.12.4.js"
-      integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
-      crossorigin="anonymous"></script>
+    <div class="container">
+      <div id="msgArea" class="panel panel-default">
+        <div class="panel-body">
+          <ul id="messages"></ul>
+        </div>
+      </div>
+      <form id="chatbox" role="from">
+        <div class="form-group">
+          <label for="message">{{.UserData.name}}からメッセージを送信</label>
+          または<a href="/logout">サインアウト</a>
+          <textarea id="message" class="form-control"></textarea>
+        </div>
+        <input type="submit" value="送信" />
+      </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
     <script>
       $(function () {
         var socket = null;
         var msgBox = $("#chatbox textarea");
-        var message = $("#message");
+        var message = $("#messages");
 
         $("#chatbox").submit(function(){
           if (!msgBox.val()) return false;
@@ -58,7 +68,7 @@
                 $("<img>").css({
                   width: 50,
                   verticalAligen:"middle",
-                }).attr("src",msg.AvatarURL),
+                }).attr("src",msg.AvatarURL).attr("title", msg.Name),
                 $("<string>").text(msg.Name + ": "),
                 $("<span>").text(msg.Message)
               )
