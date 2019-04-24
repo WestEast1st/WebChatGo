@@ -20,6 +20,8 @@ type room struct {
 	clients map[*client]bool
 	// tracerはチャットルーム場で行われた操作のログを受け取ります
 	tracer trace.Tracer
+	// avatarはアバターの情報を取得
+	avatar Avatar
 }
 
 const (
@@ -82,12 +84,14 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	client.read()
 }
 
-func newRoom() *room {
+// newRoomはすぐに利用できるチャットルームを返す
+func newRoom(avatar Avatar) *room {
 	return &room{
 		forward: make(chan *message),
 		join:    make(chan *client),
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),
 		tracer:  trace.Off(),
+		avatar:  avatar,
 	}
 }
