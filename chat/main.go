@@ -16,6 +16,12 @@ import (
 	"github.com/stretchr/objx"
 )
 
+var avatars Avatar = TryAvatars{
+	UseFileSystemAvatar,
+	UseAuthAvatar,
+	UseGravatar,
+}
+
 //http ハンドラーのtemplate
 type templateHandler struct {
 	once     sync.Once
@@ -55,7 +61,7 @@ func main() {
 		github.New(os.Getenv("GITHUB_CLIENT_ID"), os.Getenv("GITHUB_SECRET"), "http://localhost:8888/auth/callback/github"),
 	)
 	// WebSocket
-	r := newRoom(UseFileSystemAvatar)
+	r := newRoom(avatars)
 	r.tracer = trace.New(os.Stdout)
 	/*
 		templateHandler内部のServeHTTPメソッドは、http.Handlerのインタフェスに適合しているので直接渡すことができる
