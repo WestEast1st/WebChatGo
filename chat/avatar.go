@@ -2,6 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"io/ioutil"
+	"path/filepath"
 )
 
 // ErrNoAvatarはAvatarインスタンスがアバターのURLを返すことができない場合に発生するエラー
@@ -45,6 +48,30 @@ func (_ GravatarAvatar) GetAvatarURL(c *client) (string, error) {
 	if userid, ok := c.userData["userid"]; ok {
 		if useridstr, ok := userid.(string); ok {
 			return "//www.gravatar.com/avatar/" + useridstr, nil
+		}
+	}
+	return "", ErrNoAvatarURL
+}
+
+type FileSystemAvatar struct{}
+
+var UseFileSystemAvatar FileSystemAvatar
+
+func (_ FileSystemAvatar) GetAvatarURL(c *client) (string, error) {
+	if userID, ok := c.userData["userid"]; ok {
+		if userIdStr, ok := userID.(string); ok {
+			// return "/avatars/" + useridstr + ".jpg", nil
+			if files, err := ioutil.ReadDir("avatars"); err == nil {
+				fmt.Println(files)
+				for _, file := range files {
+					if file.IsDir() {
+						continue
+					}
+					if match, _ := filepath.Match(userIdStr+"*", file.Name()); match {
+						return "/avatars/" + file.Name(), nil
+					}
+				}
+			}
 		}
 	}
 	return "", ErrNoAvatarURL
